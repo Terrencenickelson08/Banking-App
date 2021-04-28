@@ -25,54 +25,53 @@ public class Checking extends BankAccount implements ICreditCard{
 		this.phoneNumber = phoneNumber;
 	}	
 	
+	//method takes the initial deposit amount and adds it to the balance
 	public void getBalance(double amount) {
 		initDepositAmount = amount;
 		this.balance = initDepositAmount;
 		getNewBalance();
 	}
 	
-	public double getTransferBalance() {
-		return transferBalance;
-	}
-	
-	public void acceptTransfer(double amount) {
-		System.out.println(amount);
-		 this.balance += amount;
-	}
-
+	//prints the checking account balance
 	public void getNewBalance() {
 		System.out.println("\nYour current Checking balance is: $" + this.balance );
 	}
 	
+	//takes in user input of the amount to deposit sends it to the makeDeposit method
 	public void amountToDeposit() {
 		 System.out.println("\nPlease enter the amount you want to deposit:");
-	       double amountDeposited = SC.nextDouble();
-	       makeDeposit(amountDeposited);
+	     double amountDeposited = SC.nextDouble();
+	     makeDeposit(amountDeposited);
 	}
 	
 	public void makeDeposit(double amount) {
+		//checks to make sure the amount being deposited is a positive number and is not greater than the max allowed in the account
 		 if (amount <= 0 || amount > this.maxBalance) {
 			 	System.out.println("Deposit Declined - Please deposit an amount between 0 - $1,000,000");
 	            return;
 	        }
+		//adds the amount passes in to the account balance
 		 	this.balance = (this.balance + amount);
 	        System.out.println("\nDeposit Accepted. \n"
 	                + "Your updated CHECKING account balance is: \n$" + this.balance);
 	    }
-	
-	public void amountToWithdrawl() {
-		System.out.println("\nPlease enter the amount you want to withdrawl:");
-	       double amountWithdrawl = SC.nextDouble();
-	       makeWithdrawl(amountWithdrawl);
+	//takes in user input on the amount of fund to withdrawal 
+	public void amountToWithdrawal() {
+		System.out.println("\nPlease enter the amount you want to withdrawal:");
+	    double amountWithdrawal = SC.nextDouble();
+	    makeWithdrawal(amountWithdrawal);
 	}
 	
-	public void makeWithdrawl(double amount) {
+	public void makeWithdrawal(double amount) {
+		//checks to make sure amount passed in is greater than 0 and the account has funds to withdrawal in it
 		 if(amount == 0 || this.balance == 0) {
 			 	System.out.println("\nPlease make a deposit first.");
 	            return;
+	     //checks for over drafts
 		 }else if(amount > this.balance) {
 	            System.out.println("\nInsufficient Funds: Over drafts are not permitted.");	
 	            return;
+	     //if all checks are passed this process the withdrawal 
 	     }else if(amount <= this.balance) {
 		 	this.balance = (this.balance - amount);
 	        System.out.println("\nWithdrawal Accepted. \n"
@@ -80,11 +79,19 @@ public class Checking extends BankAccount implements ICreditCard{
 	     	}
 		}
 	
-	public void makeTransfer(BankAccount fromAccount){
+	//method takes in the account that receives the transfer and the amount and passes them both to the processTransfer method
+	public void makeTransfer(BankAccount toAccount){
            System.out.println("\nEnter amount you want to transfer into your Savings Account:");
            double amountTransferred = SC.nextDouble();
-           processTransfer(amountTransferred, fromAccount);
+           processTransfer(amountTransferred, toAccount);
     }
+	
+	//sends the transfer amount to the checking account to be added to its total
+	public void acceptTransfer(double amount) {
+		System.out.println(amount);
+		 this.balance += amount;
+	}
+
 	
 	public void processTransfer(double amount, BankAccount toAccount) {
 		 double currentTransferBalance = amount + this.transferBalance;
@@ -97,11 +104,14 @@ public class Checking extends BankAccount implements ICreditCard{
        if (amount > this.balance) {
            System.out.println("\nInsufficient Funds: Over drafts are not permitted. Please enter a different amount: ");
            return;
+       //checks to make sure that the current transfer balance doesn't exceed the max transfer limit 
        }else if(amount > this.maxTransferLimit) {
     	   System.out.println("\nThe max daily transfer limit is $2,000."); 
     	   return;
        }else if(currentTransferBalance <= this.maxTransferLimit ) {
+    	 //sends the transfer amount to the checking account to be added its balance
            toAccount.acceptTransfer(amount);
+         //deducts the transfer amount from the savings balance then prints off the updated balance
            this.balance -= amount;
            System.out.println("You successfully transferred " + amount + " to your Savings Account!\n" +
                    "Your updated balance is: " + this.balance);
@@ -109,13 +119,14 @@ public class Checking extends BankAccount implements ICreditCard{
        }
 	}
 	
+	//method checks and processes the options based on user credit score
 	public void creditScore() {
 		System.out.println("Please select the range that your credit score is in: \n" 
 				+"1. 300 - 579\n"
 				+"2. 580 - 739\n"
 				+"3. 740 - 850");
 		
-		byte creditRange = SC.nextByte();
+		int creditRange = SC.nextInt();
 		if(creditRange == 1) {
 			System.out.println("\nSorry, you do not qualify at this time.");
 		}else if(creditRange == 2) {
@@ -133,7 +144,7 @@ public class Checking extends BankAccount implements ICreditCard{
 				    this.phoneNumber = number;
 				}
 			}
-	
+	//processes the credit score method
 	public void openCreditCard() {
 		creditScore();
 		System.out.println("\nThanks, we will contact you at " + this.phoneNumber + " shortly.");	

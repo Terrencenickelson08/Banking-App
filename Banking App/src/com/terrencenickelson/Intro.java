@@ -9,6 +9,7 @@ public class Intro{
 	private static final Bank BANK = new Bank();
 
 	public void greeting() {
+		//opening prompt
 		System.out.println("\nWelcome to " + BANK.getName() + "!\n" 
 				+ "\nHow may we assist you today?\n" 
 				+ "1. Access my Account\n"
@@ -17,9 +18,9 @@ public class Intro{
 				+ "4. Sign Out");
 		
 		
-			byte selection = SC.nextByte();
+			int selection = SC.nextInt();
 			SC.nextLine();
-			
+			//selecltionChoice
 			switch(selection) {
 				case 1:
 					accessAccount();
@@ -78,14 +79,17 @@ public class Intro{
 		int choice = SC.nextInt();
 		switch(choice) {
 		case 1: 
+			//creates a new checking account
 			Checking ck = new Checking();
 			MAIN.createCheckingAcc(choice);
 			break;
 		case 2:
+			//creates a new savings account
 			Savings sv = new Savings();
 			MAIN.createSavingsAcc(choice);
 			break;
 		case 3:
+			//creates a new business account
 			Business bs = new Business();
 			MAIN.createBusinessAcc(choice);
 			break;
